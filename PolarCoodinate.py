@@ -8,8 +8,11 @@ import sys
 import csv
 import matplotlib.pyplot as plt
 #pandasと相性がいい
+import matplotlib
+matplotlib.use("Agg")
 import numpy as np
 from matplotlib import pyplot as plt
+
 import pandas as pd
 import seaborn as sns
 import pylab
@@ -20,24 +23,28 @@ def opinionExchange(G):
     exchangeNode = G.node[exchangeNodeNum]
     opponentList = G.neighbors(exchangeNodeNum)
     if opponentList == []:
-        # print "skip"
         return G
     opponentNode = G.node[random.choice(opponentList)]#交換相手をリストの中から選択
     exchangeNode['state'] = opponentNode['state']#ここで交換する
-    # print("after state", exchangeNode['state'])
-    # print("opponent", opponentNode['state'])
+
     return G
+
 #意見を数えるメソッド
-def countOpinion(G):
-    opinionArray =[]
+def makeOpinionNodeList(G):
+    nodeNumArrayOf1 =[]
+    nodeNumArrayOf0 =[]
     numOf0 = 0
     numOf1 = 0
     for nodeNum in range(nx.number_of_nodes(G)):
         if G.node[nodeNum]['state'] == 0:
             numOf0 += 1
+            nodeNumArrayOf0.append(nodeNum)
         if G.node[nodeNum]['state'] == 1:
             numOf1 += 1
-    return numOf0
+            nodeNumArrayOf1.append(nodeNum)
+
+    return (nodeNumArrayOf0,nodeNumArrayOf1)
+
 
 #区画ごとの数を数えて区画ごとのパーセンテージリストを返すメソッド
 def countNumOfNodesByDivision(G,divisionNum):
@@ -96,16 +103,14 @@ f_coords.close()
 
 divisionNum =20
 between = 2*math.pi/divisionNum
+pos_array =[]#座標を作る
 
 for line in coordsLines:
-    # print line
     coordList = line.split()
-    # print coordList
     r = float(coordList[2])
     t = float(coordList[1])
-    G.add_node(int(coordList[0]),pos=(r*math.cos(t),r*math.sin(t)),state=random.randint(0, 1),district =t//between)
-
-countNumOfNodesByDivision(G,divisionNum)
+    G.add_node(int(coordList[0]), state=random.randint(0, 1), district=t // between)
+    pos_array.append([r * math.cos(t),r * math.sin(t)])
 
 #ファイルを読み込んでエッジの生成
 f_edge = open('el_1.txt')
@@ -124,9 +129,9 @@ for line in edgeLines:
 # plt.show()
 
 #意見交換させる
-exchangeNum = 180000
+exchangeNum = 200000
 districtRateList =np.zeros([0,divisionNum])
-# districtRateList =np.zeros([divisionNum,0])
+
 
 opinionList =[]
 for num in range(exchangeNum):
@@ -135,16 +140,18 @@ for num in range(exchangeNum):
     # 最初と最後だけ
     # if num == 0  or num == exchangeNum-1:
     if num% 1000 == 0:
-        # countNumOfNodesByDivision(G, divisionNum)
-        # numOf0 = countOpinion(G)
-        # districtRateList[num]=countNumOfNodesByDivision(G,divisionNum)
         districtRateList=np.r_[districtRateList,countNumOfNodesByDivision(G,divisionNum).reshape(1,-1)]
-        numOf0 = countOpinion(G)
-        opinionList.append(numOf0)
+        # numOf0 = countOpinion(G)
+        # opinionList.append(numOf0)
     # if num == exchangeNum-1:
     #     print opinionList
 
-# print districtRateList
+
+nodeNumArrayOf0 = makeOpinionNodeList(G)[0]
+nodeNumArrayOf1 = makeOpinionNodeList(G)[1]
+
+
+print nodeNumArrayOf0
 
 
 
@@ -153,19 +160,16 @@ for num in range(exchangeNum):
 
 #グラフの描画
 
-pylab.figure(figsize=(6, 8))  # 横3inch 縦4inchのサイズにする
-pos = nx.spring_layout(G)  # いい感じにplotする
+pylab.figure(figsize=(8, 8))  # 横3inch 縦4inchのサイズにする
 
-nx.draw_networkx_nodes(G, pos, node_size=1, node_color="w")
-nx.draw_networkx_edges(G, pos, width=0.1)
-# nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)
-# nx.draw_networkx_labels(G, pos, font_size=16, font_color="r")
+nx.draw_networkx_nodes(G,pos_array, nodelist = nodeNumArrayOf0, node_size=6, node_color="r")
+nx.draw_networkx_nodes(G, pos_array,nodelist = nodeNumArrayOf1,node_size=6, node_color="b")
 
 
-pylab.xticks([])
-pylab.yticks([])
+nx.draw_networkx_edges(G, pos_array, width=0.1)
 
 pylab.show()
+plt.savefig("pic.png")
 
 
 # plt.imshow(districtRateList)
