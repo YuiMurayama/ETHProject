@@ -1,0 +1,27 @@
+added
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# Changes to be committed:
+#	new file:   .idea/vcs.xml
+#	modified:   .idea/workspace.xml
+#	new file:   MultiplexModel/MultiplexModel/Gamemodel.py
+#	new file:   MultiplexModel/MultiplexModel/Main.py
+#	new file:   MultiplexModel/MultiplexModel/__init__.py
+#	new file:   MultiplexModel/MultiplexModel/coordslist.txt
+#	new file:   MultiplexModel/MultiplexModel/coordslist1.txt
+#	new file:   MultiplexModel/MultiplexModel/coordslist2.txt
+#	new file:   MultiplexModel/MultiplexModel/edgelist.txt
+#	new file:   MultiplexModel/MultiplexModel/el_1.txt
+#	new file:   MultiplexModel/MultiplexModel/el_2.txt
+#	new file:   MultiplexModel/MultiplexModel/vertexlist.txt
+#	new file:   MultiplexModel/__init__.py
+#	modified:   PolarCoodinate.py
+#	modified:   Test.py
+#	new file:   Votermodel/__init__.py
+#	new file:   pic.png
+#	modified:   result2.csv
+#	modified:   sample.py
+#

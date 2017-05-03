@@ -8,8 +8,8 @@ import sys
 import csv
 import matplotlib.pyplot as plt
 #pandasと相性がいい
-import matplotlib
-matplotlib.use("Agg")
+# import matplotlibz
+# matplotlib.use("Agg")
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -129,7 +129,7 @@ for line in edgeLines:
 # plt.show()
 
 #意見交換させる
-exchangeNum = 200000
+exchangeNum = 10000
 districtRateList =np.zeros([0,divisionNum])
 
 
@@ -160,16 +160,20 @@ print nodeNumArrayOf0
 
 #グラフの描画
 
-pylab.figure(figsize=(8, 8))  # 横3inch 縦4inchのサイズにする
+fig = plt.figure(figsize=(8, 8),facecolor="white")
 
-nx.draw_networkx_nodes(G,pos_array, nodelist = nodeNumArrayOf0, node_size=6, node_color="r")
-nx.draw_networkx_nodes(G, pos_array,nodelist = nodeNumArrayOf1,node_size=6, node_color="b")
+nx.draw_networkx_nodes(G,pos_array, nodelist = nodeNumArrayOf0, node_size=5, node_color="r")
+nx.draw_networkx_nodes(G, pos_array,nodelist = nodeNumArrayOf1,node_size=5, node_color="b")
 
 
 nx.draw_networkx_edges(G, pos_array, width=0.1)
+# fig.patch.set_alpha(0.)
+plt.xlim(-15,15)
+plt.ylim(-15,15)
 
 pylab.show()
 plt.savefig("pic.png")
+
 
 
 # plt.imshow(districtRateList)
