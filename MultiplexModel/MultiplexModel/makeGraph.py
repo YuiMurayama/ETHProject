@@ -24,16 +24,29 @@ def makeGraph(coordFile,edgeFile,divisionNum,layer):
     f_coords.close()
     between = 2 * math.pi / divisionNum
     pos_array = []
+
+    opinionList =[]
+    strategyList =[]
+
     for line in coordsLines:
         coordList = line.split()
         t = float(coordList[2])
         r = float(coordList[3])
         # print t
         pos_array.append([r * math.cos(t), r * math.sin(t)])
+
+        #opinionModelなら座標と0か1の意見をもたせる
         if layer == 'ON':
-            G.add_node(int(coordList[1]), state=random.randint(0, 1), district=t // between)
+            opinion = random.randint(0, 1)
+            G.add_node(int(coordList[1]), opinion=opinion, district=t // between)
+            opinionList.append(opinion)
+
+        #gameModelなら座標と0か1の戦略をもたせる
         else:
-            G.add_node(int(coordList[1]), point=0, district=t // between, strategy=random.randint(0, 1) )#0がcooperation,1がDefection
+            strategy = random.randint(0,1)
+            G.add_node(int(coordList[1]), point=0, district=t // between, strategy=strategy)#0がcooperation,1がDefection
+            strategyList.append(strategy)
+
 
     f_edge = open(edgeFile)
     edgeLines = f_edge.readlines()
@@ -42,4 +55,8 @@ def makeGraph(coordFile,edgeFile,divisionNum,layer):
         edgeList = line.split()
         G.add_edge(int(edgeList[0]), int(edgeList[1]))
 
-    return(G,pos_array)
+    #Gと座標のリストをかえす
+
+    # print pos_array
+
+    return(G,pos_array,opinionList,strategyList)

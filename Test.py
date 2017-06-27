@@ -1,35 +1,42 @@
 import numpy as np
-import pandas
-import pandas as pd
 import matplotlib.pyplot as plt
+import multinetx as mx
 
 
-array=[]
-
-array.append([2,3])
-array.append([1,2])
-
-print array[1]
+N = 10
+g1 = mx.erdos_renyi_graph(N,0.07,seed=218)
+g2 = mx.erdos_renyi_graph(N,0.07,seed=211)
 
 
+adj_block = mx.lil_matrix(np.zeros((N*2,N*2)))
 
-# H = np.array([[1, 2, 3, 4],
-#               [5, 6, 7, 8],
-#               [9, 10, 11, 12],
-#               [13, 14, 15, 16]])  # added some commas and array creation code
-#
-# fig = plt.figure(figsize=(6, 3.2))
-#
-# ax = fig.add_subplot(111)
-# ax.set_title('colorMap')
-# plt.imshow(H)
-# ax.set_aspect('equal')
-#
-# cax = fig.add_axes([0.12, 0.1, 0.78, 0.8])
-# cax.get_xaxis().set_visible(False)
-# cax.get_yaxis().set_visible(False)
-# cax.patch.set_alpha(0)
-# cax.set_frame_on(False)
-# plt.colorbar(orientation='vertical')
-# plt.show()
+adj_block[0:  N,  N:2*N] = np.identity(N)    # L_12
+adj_block += adj_block.T
+
+mg = mx.MultilayerGraph(list_of_layers=[g1,g2],inter_adjacency_matrix=adj_block)
+mg.set_edges_weights(inter_layer_edges_weight=2)
+
+mg.set_intra_edges_weights(layer=0,weight=1)
+mg.set_intra_edges_weights(layer=1,weight=2)
+
+fig = plt.figure(figsize=(10,10))
+
+ax1 = fig.add_subplot(122)
+ax1.axis('off')
+ax1.set_title('regular interconnected network')
+pos = mx.get_position(mg,mx.fruchterman_reingold_layout(mg.get_layer(0)),
+					  layer_vertical_shift=1.4,
+					  layer_horizontal_shift=0.0,
+					  proj_angle=7)
+
+mx.draw_networkx(mg, pos=pos, ax=ax1, node_size=30, with_labels=False,
+				 edge_color=[mg[a][b]['weight'] for a,b in mg.edges()],
+				 edge_cmap=plt.cm.jet_r)
+
+plt.show()
+
+
+
+
+# print(numpy.__file__)
 

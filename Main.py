@@ -39,12 +39,12 @@ def countOpinion(G):
 #ここからメイン
 #ノードの生成、 0or1のランダムに意見値、繋がってるノードをリストにいれる、ノードの番号は0~499
 G = nx.Graph()
-nodeNum = 448
+nodeNum = 500
 for nodeNum in range(nodeNum):
     G.add_node(nodeNum, state = random.randint(0,1))
 
 #ファイルを読み込んでエッジの生成
-f = open('el_new_12_4.txt')
+f = open('el_1.txt')
 lines = f.readlines()
 f.close()
 for line in lines:
@@ -53,12 +53,24 @@ for line in lines:
 
 #意見交換させる
 opinionList =[]
-for num in range(150000):
+for num in range(180000):
     G =opinionExchange(G)
     if num %100 == 0:
         numOf0 = countOpinion(G)
         opinionList.append(numOf0)
 print opinionList
+
+
+plt.plot(opinionList)
+plt.xlabel("Time Step")
+plt.ylabel("Number of opinion0")
+
+plt.show()
+
+
+
+
+
 
 #csvに書き込む
 # f = open('result3.csv', 'w')
@@ -72,7 +84,7 @@ print opinionList
 # y= numOf0
 
 # x = np.arange(-3, 3, 0.1)
-y = opinionList
-print y
-plt.plot(y)
-plt.show()
+# y = opinionList
+# print y
+# plt.plot(y)
+# plt.show()

@@ -16,6 +16,8 @@ import seaborn as sns
 import pylab
 
 #囚人のジレンマゲーム
+#sとtはペイオフの値
+
 def game(G, s, t):
     strategyList = []
     for nodeNum in range(nx.number_of_nodes(G)):
@@ -36,7 +38,7 @@ def game(G, s, t):
                 p1['point'] += 0
                 p2['point'] += 0
         strategyList.append(p1['strategy'])
-    return G,strategyList
+    return G
 
 
 def makePointList(G):
@@ -47,21 +49,21 @@ def makePointList(G):
     return pointList
 
 
-
 #戦略をコピーする
 def copyStrategy(G,strategyList):
+
     for nodeNum in range(nx.number_of_nodes(G)):
         node = G.node[nodeNum]  # ランダムにノードを選択
-        copyNode_list = G.neighbors(nodeNum)
+        copyNode_list = G.neighbors(nodeNum)    #コピー相手の候補リストを作る
         if copyNode_list != []:
-            copyNodeNum =random.choice(copyNode_list)
-            copyNode = G.node[copyNodeNum]
-            p = (1.0-math.tanh(node['point']-copyNode['point']))*0.5
+            copyNodeNum =random.choice(copyNode_list)   #候補リストの中からランダムに選択
+            copyNode = G.node[copyNodeNum]              #コピー相手の決定
+            p = (1.0-math.tanh(node['point']-copyNode['point']))*0.5    #どのくらいの確率で戦略をコピーするのか
             # print 'tanh', math.tanh(node['point'] - copyNode['point']),'pは',p
             x = random.random()
             if x < p:
-                node['strategy'] = strategyList[copyNodeNum]            # print 'exchange'
-        node['point'] = 0#全てのポイントをリセットする
+                node['strategy'] = strategyList[copyNodeNum]    #strategyListから戦略をコピー
+        node['point'] = 0   #全てのポイントをリセットする!!!
 
     return G
 
@@ -83,10 +85,13 @@ def calStrategyNum(G):
     # return (nodeNumArrayOfC,nodeNumArrayOfD)
 
 
+#ペイオフと戦略コピーをまとめたもの
+#G,s,tを入れるとGMを実行して返してくれる
 
 def gameStep(G,s,t):
-    G = game(G,s,t)[0]
-    strategyList = game(G,s,t)[1]
+    Gset = game(G,s,t)
+    G = Gset[0]
+    strategyList = Gset[1]
     G =copyStrategy(G,strategyList)
     # print calStrategyNum(G)
     return G
