@@ -17,6 +17,7 @@ import pylab
 
 #囚人のジレンマゲーム
 #sとtはペイオフの値
+from MultiplexModel.MultiplexModel.makeGraph import makeGraph
 
 def game(G, s, t):
     strategyList = []
@@ -38,8 +39,7 @@ def game(G, s, t):
                 p1['point'] += 0
                 p2['point'] += 0
         strategyList.append(p1['strategy'])
-    return G
-
+    return G,strategyList
 
 def makePointList(G):
     pointList =[]
@@ -51,7 +51,6 @@ def makePointList(G):
 
 #戦略をコピーする
 def copyStrategy(G,strategyList):
-
     for nodeNum in range(nx.number_of_nodes(G)):
         node = G.node[nodeNum]  # ランダムにノードを選択
         copyNode_list = G.neighbors(nodeNum)    #コピー相手の候補リストを作る
@@ -64,9 +63,7 @@ def copyStrategy(G,strategyList):
             if x < p:
                 node['strategy'] = strategyList[copyNodeNum]    #strategyListから戦略をコピー
         node['point'] = 0   #全てのポイントをリセットする!!!
-
     return G
-
 
 #CとDの数を数える
 def calStrategyNum(G):
@@ -85,6 +82,7 @@ def calStrategyNum(G):
     # return (nodeNumArrayOfC,nodeNumArrayOfD)
 
 
+
 #ペイオフと戦略コピーをまとめたもの
 #G,s,tを入れるとGMを実行して返してくれる
 
@@ -95,3 +93,34 @@ def gameStep(G,s,t):
     G =copyStrategy(G,strategyList)
     # print calStrategyNum(G)
     return G
+
+#
+# divisionNum = 20
+# gameLayer_info = makeGraph('coordslist_test.txt', 'edge_test.txt', divisionNum, 'GL')
+# gameLayer = gameLayer_info[0]
+# gameLayer_posArray= gameLayer_info[1]
+#
+# strategyList = gameLayer_info[3]
+#
+# coopNumList =[]
+# coopNumList.append(calStrategyNum(gameLayer))
+#
+# def printstrategy(G):
+#     for nodeNum in range(nx.number_of_nodes(G)):
+#         print(G.node[nodeNum]['strategy']),
+#
+# #GameStepが100回行われる
+# for num in range(100):
+#     gameLayer = gameStep(gameLayer, 0.5, 0.5)
+#     # gameStep(gameLayer, 0.5, 0.5)
+#     # if num % 1 == 0:CD
+#     coopNumList.append(calStrategyNum(gameLayer))
+#
+# print coopNumList
+#
+
+# plt.plot(coopNumList)
+# plt.xlabel("Time Step")
+# plt.ylabel("Number of Cooperators")
+#
+# plt.show()
