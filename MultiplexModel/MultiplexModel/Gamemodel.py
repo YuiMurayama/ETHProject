@@ -66,7 +66,7 @@ def copyStrategy(G,strategyList):
     return G
 
 #CとDの数を数える
-def calStrategyNum(G):
+def countC_of_gameLayer(G):
     nodeNumArrayOfC =[]
     nodeNumArrayOfD =[]
     numOfCooperator = 0

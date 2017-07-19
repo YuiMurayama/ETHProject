@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from MultiplexModel.MultiplexModel.makeGraph import makeGraph
 
 
-def countOpinion(G):
+def countC_of_opinionLayer(G):
     numOf0 = 0
     numOf1 = 0
     for nodeNum in range(nx.number_of_nodes(G)):
@@ -74,7 +74,7 @@ def opinionExchange(G,opinionList):
 #     numOf0List.append(numOf0)
 #
 # print numOf0List
-
+#
 # plt.plot(numOf0List)
 # plt.xlabel("Time Step")
 # plt.ylabel("Number of opinion0")
