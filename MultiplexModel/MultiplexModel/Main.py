@@ -6,7 +6,7 @@ import networkx as nx
 import random
 from gameModel import gameStep, countC_of_gameLayer, makePointList
 from opinionModel import opinionExchange, countC_of_opinionLayer
-from makeGraph import makeGraph
+from makeGraph import makeGraph, makeGraph_fromFile
 
 from matplotlib import pyplot as plt
 
@@ -15,8 +15,8 @@ from matplotlib import pyplot as plt
 #GLの層
 divisionNum = 20
 
-gameLayer_info = makeGraph('coordslist1.txt', 'el_1.txt', divisionNum, 'GL')
-# gameLayer_info = makeGraph('coordslist_test.txt', 'edge_test.txt', divisionNum, 'GL')
+gameLayer_info = makeGraph_fromFile('coordslist1.txt', 'el_1.txt', divisionNum, 'GL')
+# gameLayer_info = makeGraph_fromFile('coordslist_test.txt', 'edge_test.txt', divisionNum, 'GL')
 
 gameLayer = gameLayer_info[0]
 gameLayer_posArray= gameLayer_info[1]
@@ -25,8 +25,8 @@ strategyList = gameLayer_info[3]
 # coopNumList.append(countC_of_gameLayer(gameLayer))
 
 #OLの層
-opinionLayer_info = makeGraph('coordslist2.txt', 'el_2.txt', divisionNum, 'ON')
-# opinionLayer_info = makeGraph('coordslist_test2.txt', 'edge_test2.txt', divisionNum, 'ON')
+opinionLayer_info = makeGraph_fromFile('coordslist2.txt', 'el_2.txt', divisionNum, 'ON')
+# opinionLayer_info = makeGraph_fromFile('coordslist_test2.txt', 'edge_test2.txt', divisionNum, 'ON')
 
 
 opinionLayer = opinionLayer_info[0]
@@ -36,6 +36,22 @@ opinionList = opinionLayer_info[2]
 # print opinionLayer.node[12]['opinion']
 # print gameLayer.node[12]['strategy']
 #-----------------------------------------------ここで二つの層が完成した
+
+#---自分で生成したネットワーク
+#
+# graph = makeGraph(500)
+#
+# opinionLayer = graph[0]
+# opinionList = graph[1]
+# gameLayer = graph[2]
+# strategyList = graph[3]
+#
+# print opinionLayer.node[3]['opinion']
+# print gameLayer.node[3]['strategy']
+#
+
+#-----------------------
+
 
 #各層のCの数を数えるリスト
 numOfCList_gameLayer =[]
@@ -51,23 +67,7 @@ numOfCList_gameLayer.append(originC_gameLayer)
 
 
 #層間の強さ
-couplingStrength = 0.2
-# for num in range(100):
-#     rand = random.random()
-#     if rand<p_coupling:    #戦略をコピーする
-#         p_whichLayer = 0.5     #どちらからどちらへコピーするかの確率
-#         if random.random()< p_whichLayer:
-#             #GLからOLにコピー
-#             for nodeNum in range(nx.number_of_nodes(opinionLayer)):
-#                 opinionLayer.node[nodeNum]['opinion'] = gameLayer.node[nodeNum]['strategy']
-#         else:
-#             # OLからGLにコピー
-#             for nodeNum in range(nx.number_of_nodes(gameLayer)):
-#                 # print opinionLayer[nodeNum]['opinion']
-#                 gameLayer.node[nodeNum]['strategy'] = opinionLayer.node[nodeNum]['opinion']
-
-
-
+couplingStrength = 0.0
 
 
 def printGstate(opinionLayer, gameLayer):
@@ -78,20 +78,19 @@ def printGstate(opinionLayer, gameLayer):
         Gstate_strategy.append(gameLayer.node[nodeNum]['strategy'])
 
     print "Oは",Gstate_opinion
-    print "Gは",Gstate_strategy
+    # print "Gは",Gstate_strategy
 
 
 
-for num in range(700):
-    # print num,"番目"８jbんっmっbっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっvっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっmんっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっbmんんんっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっbんっっっっbんbんbん、b、b、、b、b、っっっっっっっっっっっっっっっっっっっっっっっっっっっっっっb、っっっっっっっっっっっっっっbっっm、mん、っっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっっb
-
+for num in range(300):
+    # print num,"番目"８
     # print "前"
     # printGstate(opinionLayer,gameLayer)
 
     rand = random.random()
     if rand<couplingStrength: #戦略をコピーする
         # print "coupling"
-        for nodeNum in range(nx.number_of_nodes(opinionLayer)):
+        for nodeNum in range(nx.number_of_nodes(opinionLayer)-1):
             rand_of_whichLayer = random.random()
             # nodeState_gameLayerPre.append(gameLayer.node[nodeNum]['strategy'])
             if rand_of_whichLayer <= 0.5:        #どちらからどちらへコピーするかの確率
@@ -107,7 +106,7 @@ for num in range(700):
 
     else:   #GMとOMがそれぞれ行われる
         #GM
-        gameLayer = gameStep(gameLayer,-0.5,1.5)
+        gameLayer = gameStep(gameLayer,0.5,0.5)
         #OM
         opinionLayerset = opinionExchange(opinionLayer, opinionList)
         opinionLayer = opinionLayerset[0]
@@ -138,12 +137,14 @@ for num in range(700):
     numOfCList_gameLayer.append(countC_of_gameLayer(gameLayer))
     numOfCList_opinionLayer.append(countC_of_opinionLayer(opinionLayer))
 
-print numOfCList_gameLayer
-print numOfCList_opinionLayer
+
+printGstate(opinionLayer, gameLayer)
+# print numOfCList_gameLayer
+# print numOfCList_opinionLayer
 
 
 #グラフの描画
-plt.plot(numOfCList_gameLayer)
+# plt.plot(numOfCList_gameLayer)
 plt.plot(numOfCList_opinionLayer)
 plt.xlabel("Time Step")
 plt.ylabel("Number of Cooperators")

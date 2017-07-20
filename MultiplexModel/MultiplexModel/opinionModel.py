@@ -12,9 +12,9 @@ def countC_of_opinionLayer(G):
     numOf0 = 0
     numOf1 = 0
     for nodeNum in range(nx.number_of_nodes(G)):
-        if G.node[nodeNum]['opinion'] == 0:
+        if G.node[nodeNum]['opinion'] <= 0.2:
             numOf0 += 1
-        if G.node[nodeNum]['opinion'] == 1:
+        if G.node[nodeNum]['opinion'] > 0.5:
             numOf1 += 1
     return numOf0
 
@@ -29,7 +29,12 @@ def opinionExchange(G,opinionList):
         if copyNode_list != []:
             copyNodeNum = random.choice(copyNode_list)  # 候補リストの中からランダムに選択
             # print "copyNodeNum",copyNodeNum
-            node['opinion'] = opinionList[copyNodeNum]  # opinionListから戦略をコピー
+
+            # print node['opinion']
+
+            node['opinion'] = (node['opinion']+opinionList[copyNodeNum])/2.0  # opinionListから戦略をコピー
+            # print node['opinion']
+
         newOpinionList.append(node['opinion'])
 
     opinionList = newOpinionList

@@ -15,28 +15,21 @@ import pandas as pd
 import seaborn as sns
 import pylab
 
-# from MultiplexModel.MultiplexModel.gameModel import gameStep, calStrategyNum, makePointList
-# from MultiplexModel.MultiplexModel.makeGraph import makeGraph
-#
-# divisionNum = 3
-# G1_info = makeGraph('coordslist_test.txt','edge_test.txt',divisionNum,'GN')
-# G1 = G1_info[0]
-# G1_posArray= G1_info[1]
-#
-#
-# coopNumList=[]
-# for num in range(300):
-#     gameStep(G1,-0.5,2)
-#     if num % 10 == 0:
-#         coopNumList.append(calStrategyNum(G1))
-#
-# print coopNumList
-#
 
-print random.random()
+G = nx.scale_free_graph(10)
+nx.set_node_attributes(G, 'opinion',0)
 
 
-print "Hello world"
+for nodeNum in range(nx.number_of_nodes(G)):
+    G.node[nodeNum]['opinion'] =random.randint(0, 1)
+
+
+
+print G.node[0]['opinion'],G.node[1]['opinion'],G.node[2]['opinion'],G.node[3]['opinion'],G.node[4]['opinion'],
+
+
+
+
 
 # plt.plot(coopNumList)
 # plt.xlabel("Time Step")

@@ -15,9 +15,38 @@ import pandas as pd
 import seaborn as sns
 import pylab
 
+    #パイソンのライブラリからグラフを作る
+def makeGraph(nodeNum):
+    #opinionLayerの作成
+    opinionLayer = nx.scale_free_graph(nodeNum)
+    # opinionLayer = nx.random_clustered_graph(nodeNum)
+    opinionList =[]
+    nx.set_node_attributes(opinionLayer, 'opinion',0)
 
-#グラフを作り出す部分
-def makeGraph(coordFile,edgeFile,divisionNum,layer):
+    for nodeNum in range(nx.number_of_nodes(opinionLayer)):
+        opinion =random.randint(0, 1)
+        opinionLayer.node[nodeNum]['opinion'] = opinion
+        opinionList.append(opinion)
+
+
+    #gameLayerの作成 opinionLayer = nx.random_clustered_graph(nodeNum)
+    gameLayer = nx.scale_free_graph(nodeNum)
+    # gameLayer = nx.random_clustered_graph(nodeNum)
+    nx.set_node_attributes(gameLayer, 'strategy', 0)
+    nx.set_node_attributes(gameLayer, 'point', 0)
+
+
+    strategyList = []
+    for nodeNum in range(nx.number_of_nodes(gameLayer)):
+        strategy = random.randint(0, 1)
+        gameLayer.node[nodeNum]['strategy'] = strategy
+        strategyList.append(strategy)
+    return opinionLayer,opinionList,gameLayer,strategyList
+
+
+
+    #ファイルからグラフを作り出す
+def makeGraph_fromFile(coordFile,edgeFile,divisionNum,layer):
     G = nx.Graph()
     f_coords = open(coordFile)
     coordsLines = f_coords.readlines()
